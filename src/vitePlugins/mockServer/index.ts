@@ -1,6 +1,6 @@
 //@ts-ignore
 
-import { Plu, Plugin_2, IncomingMessage, http, NextFunction } from "vite"
+import { Plugin_2, IncomingMessage, http, NextFunction } from "vite"
 import querystring from "querystring"
 function sleep(time: number) {
   return new Promise((resolve) => {
@@ -73,7 +73,7 @@ export default function MockService({ mockStart = "/api", Mock = [] }: { mockSta
     })
   }
   return {
-    name: "many-plugins-serverMiddlewares",
+    name: "many-plugins-mockServer",
     configurePreviewServer: server,
     configureServer: server
   }

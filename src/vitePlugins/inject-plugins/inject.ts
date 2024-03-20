@@ -1,7 +1,7 @@
 /*
  * @Author: xuxueliang
  * @Date: 2023-08-31 15:19:10
- * @LastEditTime: 2023-09-11 11:26:23
+ * @LastEditTime: 2024-02-22 14:32:51
  * @LastEditors: xuxueliang
  * @Description: 
  */
@@ -18,7 +18,7 @@ const injectPlugin = (options: { html?: any, code?: any }) => {
     configPlugins.transform = initCodeInject(options.code, config)
   }
   return {
-    name: 'inject-plugin',
+    name: 'many-plugins-inject-plugin',
     configOption: {},
     configResolved(resolvedConfig: ResolvedConfig) {
       config.resolvedConfig = resolvedConfig

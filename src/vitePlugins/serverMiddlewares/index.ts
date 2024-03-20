@@ -7,7 +7,7 @@ export default function serverMiddlewares({ middlewares }: {
   middlewares?: THandlerConfig[]
   handler?: Plugin['configureServer']
 }): PluginOption {
-  let urlConfig: { url: RegExp, handler: { (req: any, res: any): any } }[] = []
+  let urlConfig: { url: RegExp, handler: Plugin['configureServer'] }[] = []
   if (middlewares) {
     urlConfig = middlewares.map(({ url, handler }) => {
       return {
@@ -38,7 +38,8 @@ export default function serverMiddlewares({ middlewares }: {
 function runHandler(urlConfig: THandlerConfig[], req: Connect.IncomingMessage, res: ServerResponse<IncomingMessage>, next: Connect.NextFunction, i = 0) {
   if (urlConfig[i]) {
     const { url, handler } = urlConfig[i]
-    if (url.test(req.url)) {
+    if (url.test(req.url!)) {
+      //@ts-ignore
       handler(req, res, function () {
         next()
       })

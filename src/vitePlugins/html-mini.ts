@@ -1,14 +1,14 @@
 /*
  * @Author: xuxueliang
  * @Date: 2023-08-31 11:31:30
- * @LastEditTime: 2023-09-11 13:55:24
+ * @LastEditTime: 2024-02-22 14:32:31
  * @LastEditors: xuxueliang
  * @Description: 
  */
 import { minify } from 'html-minifier'
 export default function () {
   return {
-    name: 'html-mini',
+    name: 'many-plugins:html-mini',
     transformIndexHtml(html: string) {
       try {
         // replaceRule.forEach(({ source, target }) => {
