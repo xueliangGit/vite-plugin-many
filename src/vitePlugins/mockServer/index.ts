@@ -18,7 +18,7 @@ function getPostQueryData(req: IncomingMessage) {
         data += chunk
       })
       req.on("end", () => {
-        req.body = JSON.parse(data)
+        req.body = data ? JSON.parse(data) : {}
         resolve(true)
       })
     } else {
