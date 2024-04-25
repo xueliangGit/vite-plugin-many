@@ -55,9 +55,11 @@ export default function MockService({ mockStart = "/api", Mock = [] }: { mockSta
             }
             await getPostQueryData(req)
             res.setHeader("Content-Type", "application/json;chartset:UTF-8")
-            const data = await mockS[name]?.response(req)
+            const data = await mockS[name]?.response(req, res)
             if (data) {
-              res.end(typeof data === "string" ? data : JSON.stringify(data))
+              if (!res.finished) {
+                res.end(typeof data === "string" ? data : JSON.stringify(data))
+              }
             } else {
               next()
             }
