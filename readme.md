@@ -1,10 +1,3 @@
-<!--
- * @Author: xuxueliang
- * @Date: 2023-12-31 21:07:20
- * @LastEditTime: 2024-03-20 17:28:32
- * @LastEditors: xuxueliang
- * @Description: 
--->
 # vite 插件集合
 
 ## Inject 注入
