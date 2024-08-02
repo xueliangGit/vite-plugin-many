@@ -1,7 +1,6 @@
 import fs from 'fs';
-import { dirname, resolve } from 'path';
-
-
+import { dirname, } from 'path';
+import { resolvePath } from '../../utils';
 export default function initHtmlPlugins(htmlOptions: any, config: any) {
   const transformIndexHtml = async function (html: string, ctx: any) {
     const injectTags = html.match(/<inject\s+file="(.+?)"\s+(\/)?>(<\/inject>)?/g);
@@ -15,7 +14,7 @@ export default function initHtmlPlugins(htmlOptions: any, config: any) {
             const presetFile = htmlOptions.file[fileAttr[1]];
             if (presetFile) {
               try {
-                const fileContent = fs.readFileSync(resolve(config.resolvedConfig.root, presetFile), 'utf-8');
+                const fileContent = fs.readFileSync(resolvePath(config.resolvedConfig.root, presetFile), 'utf-8');
                 const injectedContent = interpolate(fileContent, attributes);
                 html = html.replace(tag, injectedContent);
                 continue; // 跳过后续的流程
@@ -27,7 +26,7 @@ export default function initHtmlPlugins(htmlOptions: any, config: any) {
           }
 
           // 执行路径模式逻辑
-          const filePath = resolve(dirname(ctx.filename), fileAttr[1]);
+          const filePath = resolvePath(dirname(ctx.filename), fileAttr[1]);
           try {
             const fileContent = fs.readFileSync(filePath, 'utf-8');
             const injectedContent = interpolate(fileContent, attributes);
