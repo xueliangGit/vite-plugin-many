@@ -1,12 +1,12 @@
 /*
  * @Author: xuxueliang
  * @Date: 2023-09-04 14:05:15
- * @LastEditTime: 2023-09-11 14:07:00
+ * @LastEditTime: 2025-01-07 16:03:39
  * @LastEditors: xuxueliang
  * @Description: 
  */
-import { resolve } from 'path';
 import ts from 'typescript';
+import { resolvePath } from '../../../utils';
 // 获取项目根目录
 const projectRoot = process.cwd();
 // 加载和解析 tsconfig 文件
@@ -26,7 +26,7 @@ export default function initHtmlPlugins(htmlOptions: any, config: any) {
   }
   const transform = async function (code: string, id: string) {
     if (!lastJsxFactoryPath) {
-      lastJsxFactoryPath = resolve(config.resolvedConfig.root, jsxFactoryPath)
+      lastJsxFactoryPath = resolvePath(config.resolvedConfig.root, jsxFactoryPath)
     }
     if (id.endsWith('.jsx') || id.endsWith('.tsx')) {
       code = injectJSXFactory(code, lastJsxFactoryPath);
