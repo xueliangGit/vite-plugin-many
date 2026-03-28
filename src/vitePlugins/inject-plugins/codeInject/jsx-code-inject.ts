@@ -41,9 +41,21 @@ export default function initHtmlPlugins(htmlOptions: any, config: any) {
 function injectJSXFactory(code: string, jsxFactoryPath: string) {
   // 自定义注入逻辑
   // 在这里根据需要修改或扩展 JSX 元素的转换代码
-  if (code.includes(jsxFactory || ' h(')) {
-    code = `import ${jsxFactory} from  "${jsxFactoryPath}"
-`+ code
+  const factory = jsxFactory || 'h';
+
+  // 检查是否已经存在对该 factory 的 import
+  // 匹配：
+  // 1. import h from ...
+  // 2. import { h } from ...
+  // 3. import * as h from ...
+  // 4. import { a, h, b } from ...
+  const importRegex = new RegExp(`import\\s+([\\w\\s*{},]*\\b${factory}\\b[\\w\\s*{},]*)\\s+from`, 'm');
+
+  if (code.includes(factory + '(') || (jsxFactory && code.includes(jsxFactory))) {
+    if (!importRegex.test(code)) {
+      code = `import ${factory} from  "${jsxFactoryPath}"
+` + code
+    }
   }
   return code;
 }

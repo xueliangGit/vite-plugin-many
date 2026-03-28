@@ -1,17 +1,18 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { PluginOption, Plugin, Connect } from 'vite';
+import { PluginOption, Connect } from 'vite';
+
 type THandlerConfig =
-  { url: RegExp, handler: Plugin['configureServer'] }
+  { url: RegExp | string, handler: Connect.NextHandleFunction }
 
 export default function serverMiddlewares({ middlewares }: {
   middlewares?: THandlerConfig[]
-  handler?: Plugin['configureServer']
+  handler?: Connect.NextHandleFunction
 }): PluginOption {
-  let urlConfig: { url: RegExp, handler: Plugin['configureServer'] }[] = []
+  let urlConfig: { url: RegExp, handler: Connect.NextHandleFunction }[] = []
   if (middlewares) {
     urlConfig = middlewares.map(({ url, handler }) => {
       return {
-        url: new RegExp(url),
+        url: url instanceof RegExp ? url : new RegExp(url),
         handler
       }
     })
@@ -19,27 +20,19 @@ export default function serverMiddlewares({ middlewares }: {
   return {
     name: 'many-plugins-serverMiddlewares',
     configureServer(server) {
-      console.log(server.middlewares)
       if (urlConfig?.length) {
         server.middlewares.use(async (req, res, next) => {
           runHandler(urlConfig, req, res, next)
-          // urlConfig?.forEach(({ url, handler }) => {
-          //   if (url.test(req.url)) {
-          //     handler(req, res, function () {
-          //       next()
-          //     })
-          //   }
-          // })
         })
       }
     },
   }
 }
-function runHandler(urlConfig: THandlerConfig[], req: Connect.IncomingMessage, res: ServerResponse<IncomingMessage>, next: Connect.NextFunction, i = 0) {
+
+function runHandler(urlConfig: { url: RegExp, handler: Connect.NextHandleFunction }[], req: Connect.IncomingMessage, res: ServerResponse<IncomingMessage>, next: Connect.NextFunction, i = 0) {
   if (urlConfig[i]) {
     const { url, handler } = urlConfig[i]
     if (url.test(req.url!)) {
-      //@ts-ignore
       handler(req, res, function () {
         next()
       })
